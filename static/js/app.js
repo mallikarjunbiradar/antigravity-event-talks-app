@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('emptyState');
     
     const refreshBtn = document.getElementById('refreshBtn');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
     const retryBtn = document.getElementById('retryBtn');
     const searchInput = document.getElementById('searchInput');
     const clearSearchBtn = document.getElementById('clearSearchBtn');
@@ -386,6 +387,47 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFilter = badge.dataset.type;
         applyFiltersAndSearch();
     });
+
+    // Export to CSV function
+    function exportToCSV() {
+        if (!filteredReleases || filteredReleases.length === 0) {
+            alert("No release notes available to export.");
+            return;
+        }
+
+        const headers = ["Date", "Type", "Content"];
+        const rows = filteredReleases.map(rel => {
+            const cleanContent = stripHtml(rel.body)
+                .replace(/"/g, '""') // Escape double quotes
+                .replace(/\s+/g, ' ') // Standardize spacing
+                .replace(/\r?\n/g, ' ') // Flatten newlines
+                .trim();
+            return [
+                `"${rel.date}"`,
+                `"${rel.type}"`,
+                `"${cleanContent}"`
+            ];
+        });
+
+        const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        
+        const filterStr = currentFilter !== 'all' ? `_${currentFilter.toLowerCase()}` : '';
+        const timestamp = new Date().toISOString().slice(0, 10);
+        link.setAttribute("download", `bigquery_releases${filterStr}_${timestamp}.csv`);
+        
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Export Button Clicked
+    exportCsvBtn.addEventListener('click', exportToCSV);
 
     // Refresh Button Clicked
     refreshBtn.addEventListener('click', () => {
