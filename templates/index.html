@@ -82,9 +82,17 @@
                 <button class="filter-badge" data-type="Issue">Issues <span class="count" id="count-issue">0</span></button>
                 <button class="filter-badge" data-type="Change">Changes <span class="count" id="count-change">0</span></button>
             </div>
-            <div class="feed-meta">
-                <span class="status-indicator live"></span>
-                <span id="lastFetchedText">Checking feed status...</span>
+            <div class="feed-meta" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <button id="sortToggleBtn" class="btn btn-secondary" aria-label="Toggle sort order" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--card-border);">
+                    <svg viewBox="0 0 24 24" width="14" height="14">
+                        <path fill="currentColor" d="M9 3L5 7h3v4h2V7h3L9 3zm10 14h-3v-4h-2v4h-3l4 4 4-4zM5 15h10v-2H5v2zm0 4h7v-2H5v2z"/>
+                    </svg>
+                    <span id="sortText">Newest First</span>
+                </button>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="status-indicator live"></span>
+                    <span id="lastFetchedText">Checking feed status...</span>
+                </div>
             </div>
         </section>
 
@@ -92,10 +100,27 @@
         <section class="feed-section">
             <!-- Loading State -->
             <div class="loading-state" id="loadingState">
-                <div class="spinner-ring">
-                    <div></div><div></div><div></div><div></div>
+                <div class="skeleton-grid">
+                    <div class="skeleton-card">
+                        <div class="skeleton-header"><div class="skeleton-date"></div><div class="skeleton-badge"></div></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-footer"><div class="skeleton-btn"></div><div class="skeleton-btn"></div></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-header"><div class="skeleton-date"></div><div class="skeleton-badge"></div></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-footer"><div class="skeleton-btn"></div><div class="skeleton-btn"></div></div>
+                    </div>
+                    <div class="skeleton-card">
+                        <div class="skeleton-header"><div class="skeleton-date"></div><div class="skeleton-badge"></div></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-footer"><div class="skeleton-btn"></div><div class="skeleton-btn"></div></div>
+                    </div>
                 </div>
-                <p>Fetching latest BigQuery release notes...</p>
+                <p class="loading-text" style="color: var(--text-secondary); margin-top: 10px; font-weight: 500;">Fetching latest BigQuery release notes...</p>
             </div>
 
             <!-- Error State -->
@@ -179,6 +204,9 @@
     <footer class="app-footer">
         <p>BigQuery Release Notes Viewer &copy; 2026. Data fetched dynamically from Google Cloud Release Feed.</p>
     </footer>
+
+    <!-- Global Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
 
     <!-- App JavaScript -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

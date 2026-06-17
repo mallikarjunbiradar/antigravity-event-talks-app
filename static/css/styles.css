@@ -1108,3 +1108,170 @@ body[data-theme="light"] .modal-footer {
     background: #f1f5f9;
 }
 
+/* ==========================================================================
+   Skeleton Shimmer & Loaders
+   ========================================================================== */
+
+.skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.skeleton-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150px;
+    width: 150px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+    animation: shimmer-effect 1.5s infinite;
+}
+
+body[data-theme="light"] .skeleton-card::after {
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.03), transparent);
+}
+
+@keyframes shimmer-effect {
+    0% { left: -150px; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+.skeleton-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skeleton-date {
+    width: 100px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+.skeleton-badge {
+    width: 80px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+}
+
+.skeleton-line {
+    width: 100%;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+}
+
+.skeleton-line.short {
+    width: 70%;
+}
+
+.skeleton-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.skeleton-btn {
+    flex: 1;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+}
+
+/* Light mode overrides for skeletons */
+body[data-theme="light"] .skeleton-date,
+body[data-theme="light"] .skeleton-badge,
+body[data-theme="light"] .skeleton-line,
+body[data-theme="light"] .skeleton-btn {
+    background: rgba(15, 23, 42, 0.05);
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.toast {
+    background: rgba(15, 19, 38, 0.95);
+    border: 1px solid var(--card-border-hover);
+    border-radius: 12px;
+    padding: 12px 20px;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: auto;
+    animation: toast-fade-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+body[data-theme="light"] .toast {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #0f172a;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes toast-fade-in {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.toast.removing {
+    transform: translateY(-20px);
+    opacity: 0;
+}
+
+/* ==========================================================================
+   Utility Animations
+   ========================================================================== */
+
+.shake {
+    animation: text-shake-anim 0.3s ease;
+}
+
+@keyframes text-shake-anim {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
+
+

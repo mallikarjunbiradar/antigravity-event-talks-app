@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSearchQuery = '';
     let selectedRelease = null;
     let activePreset = 'direct';
+    let sortOrder = 'desc'; // 'desc' = Newest first, 'asc' = Oldest first
 
     // --- DOM Elements ---
     const cardsGrid = document.getElementById('cardsGrid');
@@ -21,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshBtn = document.getElementById('refreshBtn');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const sortToggleBtn = document.getElementById('sortToggleBtn');
+    const sortText = document.getElementById('sortText');
     const retryBtn = document.getElementById('retryBtn');
     const searchInput = document.getElementById('searchInput');
     const clearSearchBtn = document.getElementById('clearSearchBtn');
@@ -114,10 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Apply current filters
             applyFiltersAndSearch();
             
+            if (forceRefresh) {
+                showToast("Feed successfully refreshed!");
+            }
+            
             // Display warn message if any
             if (data.error) {
                 console.warn(data.error);
-                // Optionally show a subtle toast
+                showToast(`Warning: ${data.error}`);
             }
         } catch (error) {
             console.error('Fetch Error:', error);
@@ -200,8 +207,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchesType && matchesSearch;
         });
 
+        // Sort by date/timestamp
+        filteredReleases.sort((a, b) => {
+            const dateA = new Date(a.updated || a.date);
+            const dateB = new Date(b.updated || b.date);
+            return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+        });
+
         if (filteredReleases.length === 0) {
             showEmptyState();
+            const emptyP = emptyState.querySelector('p');
+            if (emptyP) {
+                if (currentSearchQuery) {
+                    emptyP.innerHTML = `No results found for search query <strong>"${currentSearchQuery}"</strong> under ${currentFilter === 'all' ? 'any category' : `the <strong>${currentFilter}</strong> category`}.`;
+                } else {
+                    emptyP.innerHTML = `No release notes found under the <strong>${currentFilter}</strong> category filter.`;
+                }
+            }
         } else {
             showCardsState();
             renderCards();
@@ -254,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const releaseText = `BigQuery Release Notes (${dateStr}) - [${rel.type}]:\n\n${textContent}`;
                 
                 navigator.clipboard.writeText(releaseText).then(() => {
+                    showToast("Release note copied to clipboard!");
                     const originalHTML = btn.innerHTML;
                     btn.innerHTML = `
                         <svg viewBox="0 0 24 24" width="16" height="16">
@@ -351,7 +374,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Visual warning near limit
         charCount.classList.toggle('warning', textLen >= 250 && textLen <= 279);
-        charCount.classList.toggle('error', textLen >= 280);
+        
+        const isError = textLen >= 280;
+        const wasError = charCount.classList.contains('error');
+        charCount.classList.toggle('error', isError);
+
+        // Shake animation if just exceeded limit
+        if (isError && !wasError) {
+            charCount.classList.add('shake');
+            setTimeout(() => {
+                charCount.classList.remove('shake');
+            }, 300);
+        }
 
         // Disable submit button if over limit or empty
         submitTweetBtn.disabled = (textLen > 280 || textLen === 0);
@@ -425,6 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
+        showToast(`Exported ${filteredReleases.length} release notes to CSV!`);
     }
 
     // Export Button Clicked
@@ -482,6 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = e.currentTarget;
         
         navigator.clipboard.writeText(textToCopy).then(() => {
+            showToast("Tweet draft copied to clipboard!");
             const originalHTML = btn.innerHTML;
             btn.innerHTML = `
                 <svg viewBox="0 0 24 24" width="16" height="16">
@@ -503,6 +540,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Open Web Intent URL
         const twitterIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
         window.open(twitterIntentUrl, '_blank', 'noopener,noreferrer');
+        
+        showToast("Opened Twitter composer draft!");
         
         // Close modal
         tweetModal.close();
@@ -547,7 +586,41 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         updateThemeToggleUI(newTheme);
+        showToast(`Swapped to ${newTheme} mode.`);
     });
+
+    // --- Sort Toggle Logic ---
+    sortToggleBtn.addEventListener('click', () => {
+        sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+        sortText.textContent = sortOrder === 'desc' ? 'Newest First' : 'Oldest First';
+        applyFiltersAndSearch();
+        showToast(`Sorted release notes (${sortOrder === 'desc' ? 'newest first' : 'oldest first'}).`);
+    });
+
+    // --- Toast Notification Helper ---
+    function showToast(message) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `
+            <svg viewBox="0 0 24 24" width="16" height="16" style="color: var(--primary-light)">
+                <path fill="currentColor" d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/>
+            </svg>
+            <span>${message}</span>
+        `;
+
+        container.appendChild(toast);
+
+        // Auto remove after 3s
+        setTimeout(() => {
+            toast.classList.add('removing');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
 
     // --- Initial Load ---
     loadReleases(false);
