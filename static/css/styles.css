@@ -1010,6 +1010,14 @@ body[data-theme="light"] .filter-badge:hover {
 }
 
 body[data-theme="light"] .filter-badge.active {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
+}
+
+body[data-theme="light"] .filter-badge.active .count {
+    background: rgba(255, 255, 255, 0.25);
     color: #ffffff;
 }
 
