@@ -952,3 +952,159 @@ footer.app-footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================================
+   Light Theme Color Scheme Overrides
+   ========================================================================== */
+
+body[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #e2e8f0;
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --card-border: rgba(15, 23, 42, 0.08);
+    --card-border-hover: rgba(99, 102, 241, 0.5);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    
+    --primary: #4f46e5;
+    --primary-light: #6366f1;
+    
+    --color-feature-bg: rgba(16, 185, 129, 0.08);
+    --color-announcement-bg: rgba(139, 92, 246, 0.08);
+    --color-issue-bg: rgba(244, 63, 94, 0.08);
+    --color-change-bg: rgba(14, 165, 233, 0.08);
+
+    --twitter-bg: #1da1f2;
+    --twitter-color: #ffffff;
+    --twitter-bg-hover: #1a91da;
+}
+
+/* Specific Light Mode Rules */
+body[data-theme="light"] .app-header {
+    background: rgba(248, 250, 252, 0.8);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+body[data-theme="light"] .search-container input {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(15, 23, 42, 0.1);
+    color: #0f172a;
+}
+
+body[data-theme="light"] .search-container input:focus {
+    background: #ffffff;
+    border-color: var(--primary-light);
+}
+
+body[data-theme="light"] .filter-badge {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(15, 23, 42, 0.08);
+    color: #475569;
+}
+
+body[data-theme="light"] .filter-badge:hover {
+    border-color: var(--primary-light);
+    color: #0f172a;
+}
+
+body[data-theme="light"] .filter-badge.active {
+    color: #ffffff;
+}
+
+body[data-theme="light"] .glow-orb {
+    opacity: 0.07;
+}
+
+body[data-theme="light"] .card-body code {
+    background: rgba(15, 23, 42, 0.05);
+    color: #db2777;
+}
+
+body[data-theme="light"] .card-body strong {
+    color: #0f172a;
+}
+
+body[data-theme="light"] .card-body a {
+    color: #4f46e5;
+    border-bottom-color: rgba(79, 70, 229, 0.4);
+}
+
+body[data-theme="light"] .card-body a:hover {
+    color: #312e81;
+}
+
+body[data-theme="light"] .card-actions {
+    border-top-color: rgba(15, 23, 42, 0.05);
+}
+
+body[data-theme="light"] .btn-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #334155;
+}
+
+body[data-theme="light"] .btn-secondary:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
+body[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+}
+
+body[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Modal styling overrides for light theme */
+body[data-theme="light"] .modal-content {
+    background: #ffffff;
+    border-color: #cbd5e1;
+}
+
+body[data-theme="light"] .modal-header {
+    border-bottom-color: #e2e8f0;
+}
+
+body[data-theme="light"] .modal-body {
+    background: #f8fafc;
+}
+
+body[data-theme="light"] .update-preview-box {
+    background: #f1f5f9;
+    border-left-color: var(--primary-light);
+}
+
+body[data-theme="light"] .tweet-composer-area textarea {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+body[data-theme="light"] .tweet-composer-area textarea:focus {
+    border-color: var(--primary-light);
+}
+
+body[data-theme="light"] .preset-btn {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+body[data-theme="light"] .preset-btn:hover {
+    background: #e2e8f0;
+}
+
+body[data-theme="light"] .preset-btn.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+body[data-theme="light"] .modal-footer {
+    border-top-color: #e2e8f0;
+    background: #f1f5f9;
+}
+

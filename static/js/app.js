@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const refreshBtn = document.getElementById('refreshBtn');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
     const retryBtn = document.getElementById('retryBtn');
     const searchInput = document.getElementById('searchInput');
     const clearSearchBtn = document.getElementById('clearSearchBtn');
@@ -522,6 +523,31 @@ document.addEventListener('DOMContentLoaded', () => {
             tweetModal.close();
         });
     }
+
+    // --- Theme toggling logic ---
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.setAttribute('data-theme', savedTheme);
+    updateThemeToggleUI(savedTheme);
+
+    function updateThemeToggleUI(theme) {
+        const moonIcon = themeToggleBtn.querySelector('.moon-icon');
+        const sunIcon = themeToggleBtn.querySelector('.sun-icon');
+        if (theme === 'light') {
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        } else {
+            moonIcon.style.display = 'block';
+            sunIcon.style.display = 'none';
+        }
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeToggleUI(newTheme);
+    });
 
     // --- Initial Load ---
     loadReleases(false);
